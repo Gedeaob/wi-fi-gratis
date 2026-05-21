@@ -5,211 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wi-Fi Grátis - Acesso Livre</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a;
-            overflow: hidden;
-            height: 100vh;
-            height: 100dvh;
-            width: 100vw;
-            touch-action: none;
-        }
-
-        /* ===== TELA 1: FALSO LOGIN WI-FI ===== */
-        #wifi-screen {
-            position: fixed;
-            top: 0; left: 0;
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            overscroll-behavior: none;
             width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: opacity 0.3s ease;
-        }
-
-        #wifi-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .wifi-icon {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            animation: pulse-wifi 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-wifi {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-        }
-
-        .wifi-title {
-            color: #ffffff;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        .wifi-subtitle {
-            color: #a0a0c0;
-            font-size: 0.95rem;
-            margin-bottom: 35px;
-            text-align: center;
-        }
-
-        .connect-btn {
-            background: linear-gradient(135deg, #00b4d8, #0077b6);
-            color: white;
-            border: none;
-            padding: 16px 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.4);
-            letter-spacing: 0.5px;
-        }
-
-        .connect-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0, 180, 216, 0.6);
-        }
-
-        .connect-btn:active {
-            transform: translateY(0);
-        }
-
-        .wifi-note {
-            color: #666688;
-            font-size: 0.75rem;
-            margin-top: 25px;
-            text-align: center;
-            max-width: 280px;
-            line-height: 1.4;
-        }
-
-        /* ===== TELA 2: LOADING FALSO ===== */
-        #loading-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 99;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid #00b4d8;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 25px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: #ffffff;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%   { content: ''; }
-            25%  { content: '.'; }
-            50%  { content: '..'; }
-            75%  { content: '...'; }
-            100% { content: ''; }
-        }
-
-        /* ===== TELA 3: GORILA TROLL ===== */
-        #troll-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
+            position: fixed; /* Impede rolagem e bounce no mobile */
             background: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* FLASH EFFECT */
+        .flash-effect {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 300; opacity: 0; pointer-events: none;
+        }
+        .flash-active { animation: flash-bang 0.4s ease-out; }
+        @keyframes flash-bang { 0% { opacity: 0.9; } 100% { opacity: 0; } }
+
+        /* TELA PRINCIPAL (GORILA) */
+        #troll-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 200; background: #000;
         }
 
         .gorilla-bg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('imagem/gorila.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
             z-index: 1;
         }
 
         .troll-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%; 
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    /* 👇 MUDANÇAS AQUI: */
-    justify-content: flex-start; /* Alinha ao TOPO em vez do fundo */
-    padding-top: 1vh;           /* Distância do topo (28% da altura da tela) */
-    padding-bottom: 0;
-    
-    pointer-events: none;
-}
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; display: flex; flex-direction: column; align-items: center;
+            justify-content: flex-start; /* 👈 Alinha ao topo */
+            padding-top: 28vh;           /* 👈 Ajuste aqui para posicionar na testa */
+            pointer-events: none;
+        }
 
         .troll-text {
-            color: #ffffff;
-            font-size: 3.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
+            color: #ffffff; font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
             text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 0 30px rgba(255,0,0,0.8);
-            opacity: 0;
-            transform: scale(0.3);
+            opacity: 0; transform: scale(0.3);
             animation: troll-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards;
-            text-align: center;
-            line-height: 1.1;
-            -webkit-text-stroke: 2px #ff0000;
+            text-align: center; line-height: 1.1; -webkit-text-stroke: 2px #ff0000;
         }
 
         .troll-subtext {
-            color: #ffdd00;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-top: 15px;
-            opacity: 0;
-            animation: fade-in-up 0.5s ease 1.2s forwards;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            text-align: center;
+            color: #ffdd00; font-size: 1.3rem; font-weight: 700; margin-top: 15px;
+            opacity: 0; animation: fade-in-up 0.5s ease 1.2s forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); text-align: center; padding: 0 10px;
         }
 
         @keyframes troll-pop {
@@ -217,17 +64,13 @@
             60% { transform: scale(1.2) rotate(3deg); }
             100% { opacity: 1; transform: scale(1) rotate(0deg); }
         }
-
         @keyframes fade-in-up {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* VIBRAÇÃO / SHAKE */
-        .shake-hard {
-            animation: shake 0.15s ease-in-out 12;
-        }
-
+        /* SHAKE NA TELA */
+        .shake-hard { animation: shake 0.15s ease-in-out 12; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10% { transform: translateX(-12px) rotate(-1deg); }
@@ -241,152 +84,65 @@
             90% { transform: translateX(-3px) rotate(-0.3deg); }
         }
 
-        /* FLASH EFFECT */
-        .flash-effect {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: white;
-            z-index: 300;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .flash-active {
-            animation: flash-bang 0.4s ease-out;
-        }
-
-        @keyframes flash-bang {
-            0% { opacity: 0.9; }
-            100% { opacity: 0; }
+        /* BARRA FAKE NO RODAPÉ */
+        .fake-bottom-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(0,0,0,0.6); color: #aaa; font-size: 0.65rem;
+            text-align: center; padding: 6px; z-index: 3; backdrop-filter: blur(5px);
         }
 
         /* CONFETTI */
-        .confetti-piece {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            z-index: 250;
-            pointer-events: none;
-        }
+        .confetti-piece { position: fixed; z-index: 250; pointer-events: none; }
 
-        /* BOTTOM BAR FAKE */
-        .fake-bottom-bar {
-            position: fixed;
-            bottom: 0; left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            color: #aaa;
-            font-size: 0.65rem;
-            text-align: center;
-            padding: 6px;
-            z-index: 3;
-            backdrop-filter: blur(5px);
-        }
-
-        /* ===== RESPONSIVIDADE ===== */
-        @media (max-width: 360px) {
-            .wifi-title { font-size: 1.5rem; }
-            .troll-text { font-size: 2.5rem; }
-            .troll-subtext { font-size: 1rem; }
-        }
-
-        @media (min-width: 768px) {
-            .wifi-title { font-size: 2.2rem; }
-            .troll-text { font-size: 4.5rem; }
-            .troll-subtext { font-size: 1.6rem; }
-        }
-
-        @media (min-height: 800px) {
-            .troll-overlay { padding-bottom: 20%; }
-        }
-
-        @media (orientation: landscape) {
-            .gorilla-bg {
-                background-size: cover;
-                background-position: center center;
-            }
-            .troll-text { font-size: 3rem; }
-            .troll-subtext { font-size: 1.1rem; }
-        }
-
-        /* PREVENT SCROLL */
-        html, body {
-            overscroll-behavior: none;
-            position: fixed;
-            width: 100%;
-            height: 100%;
+        /* RESPONSIVIDADE */
+        @media (max-width: 360px) { .troll-text { font-size: 2.5rem; } .troll-subtext { font-size: 1rem; } }
+        @media (min-width: 768px) { .troll-text { font-size: 4.5rem; } .troll-subtext { font-size: 1.6rem; } }
+        @media (orientation: landscape) { 
+            .troll-text { font-size: 3rem; } .troll-subtext { font-size: 1.1rem; } 
+            .gorilla-bg { background-position: center; } 
         }
     </style>
 </head>
 <body>
-
-    <!-- FLASH -->
     <div class="flash-effect" id="flash"></div>
 
-    <!-- TELA 1: FAKE WI-FI -->
-    <div id="wifi-screen">
-        <svg class="wifi-icon" viewBox="0 0 24 24" fill="white">
-            <path d="M12 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-5.27-3.39C8.77 12.64 10.29 11.5 12 11.5s3.23 1.14 5.27 3.11l1.42-1.42C16.32 10.85 14.34 9.5 12 9.5s-4.32 1.35-6.69 3.69l1.42 1.42zm-2.83-2.83C6.55 9.13 9.06 7.5 12 7.5s5.45 1.63 8.1 4.28l1.42-1.42C18.82 7.66 15.64 5.5 12 5.5S5.18 7.66 2.48 10.36l1.42 1.42z"/>
-        </svg>
-        <div class="wifi-title">Wi-Fi Grátis</div>
-        <div class="wifi-subtitle">Rede aberta — sem senha necessária</div>
-        <button class="connect-btn" id="connect-btn">CONECTAR</button>
-        <div class="wifi-note">Ao conectar, você concorda com os termos de uso da rede.</div>
-    </div>
-
-    <!-- TELA 2: LOADING -->
-    <div id="loading-screen">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Conectando<span class="loading-dots"></span></div>
-    </div>
-
-    <!-- TELA 3: GORILA TROLL -->
     <div id="troll-screen">
         <div class="gorilla-bg"></div>
         <div class="troll-overlay">
-            <div class="troll-text">TROUXA!</div>
-            <div class="troll-subtext">🤣 Wi-Fi grátis? O gorila agradece sua visita kkk</div>
+            <div class="troll-text">LEU TROUXA!</div>
+            <div class="troll-subtext">🤣 Wi-Fi grátis? A única conexão aqui é com o SUSSU! 🤣</div>
         </div>
         <div class="fake-bottom-bar">Recarregue a página para tentar novamente 😈</div>
     </div>
 
     <script>
-        // ===== VARIÁVEIS =====
-        const wifiScreen = document.getElementById('wifi-screen');
-        const loadingScreen = document.getElementById('loading-screen');
-        const trollScreen = document.getElementById('troll-screen');
-        const connectBtn = document.getElementById('connect-btn');
-        const flash = document.getElementById('flash');
-
-        // ===== FUNÇÃO DE VIBRAÇÃO =====
+        // VIBRAÇÃO
         function vibratePhone() {
             if (navigator.vibrate) {
-                // Padrão de vibração: longo, curto, longo, curto, longo
                 navigator.vibrate([200, 100, 200, 100, 300, 100, 200, 100, 500]);
             }
         }
 
-        // ===== FUNÇÃO FLASH =====
+        // FLASH BRANCO
         function triggerFlash() {
+            const flash = document.getElementById('flash');
             flash.classList.add('flash-active');
             setTimeout(() => flash.classList.remove('flash-active'), 500);
         }
 
-        // ===== CONFETTI =====
+        // CONFETTI
         function launchConfetti() {
             const colors = ['#ff0000', '#ffdd00', '#00ff00', '#00b4d8', '#ff00ff', '#ff6600', '#ffffff'];
-            const shapes = ['circle', 'square'];
-
             for (let i = 0; i < 60; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti-piece');
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.top = '-10px';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)] === 'circle' ? '50%' : '2px';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                const size = Math.random() * 10 + 5;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
                 document.body.appendChild(confetti);
 
                 const duration = Math.random() * 2 + 1.5;
@@ -394,59 +150,31 @@
                 const rotation = Math.random() * 720;
 
                 confetti.animate([
-                    {
-                        transform: `translateY(0) translateX(0) rotate(0deg)`,
-                        opacity: 1
-                    },
-                    {
-                        transform: `translateY(${window.innerHeight + 50}px) translateX(${xDrift}px) rotate(${rotation}deg)`,
-                        opacity: 0.5
-                    }
-                ], {
-                    duration: duration * 1000,
-                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    fill: 'forwards'
-                });
+                    { transform: `translateY(0) translateX(0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translateY(${window.innerHeight + 50}px) translateX(${xDrift}px) rotate(${rotation}deg)`, opacity: 0.5 }
+                ], { duration: duration * 1000, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' });
 
                 setTimeout(() => confetti.remove(), duration * 1000 + 100);
             }
         }
 
-        // ===== SEQUÊNCIA DA PEGADINHA =====
-        connectBtn.addEventListener('click', () => {
-            // Esconde tela Wi-Fi, mostra loading
-            wifiScreen.classList.add('hidden');
-            loadingScreen.style.display = 'flex';
+        // 🔥 DISPARA TUDO ASSIM QUE A PÁGINA CARREGA
+        window.addEventListener('DOMContentLoaded', () => {
+            triggerFlash();
+            document.body.classList.add('shake-hard');
+            setTimeout(() => document.body.classList.remove('shake-hard'), 2000);
 
-            // Após 3 segundos de "loading", REVELA O GORILA
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                trollScreen.style.display = 'flex';
+            setTimeout(vibratePhone, 100);
+            setTimeout(launchConfetti, 300);
 
-                // FLASH
-                triggerFlash();
-
-                // VIBRAÇÃO
-                vibratePhone();
-
-                // SHAKE na tela inteira
-                document.body.classList.add('shake-hard');
-                setTimeout(() => document.body.classList.remove('shake-hard'), 2000);
-
-                // CONFETTI
-                setTimeout(launchConfetti, 300);
-
-                // Tenta vibrar de novo após um tempinho
-                setTimeout(vibratePhone, 2000);
-                setTimeout(launchConfetti, 2000);
-
-            }, 3000);
+            // Segunda rodada de efeitos para garantir o susto
+            setTimeout(vibratePhone, 2000);
+            setTimeout(launchConfetti, 2200);
         });
 
-        // ===== PREVENT ZOOM / SCROLL EM MOBILE =====
+        // PREVINE ZOOM E SCROLL NO CELULAR
         document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
         document.addEventListener('gesturestart', (e) => e.preventDefault());
     </script>
-
 </body>
 </html>
